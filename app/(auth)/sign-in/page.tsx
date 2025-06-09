@@ -2,7 +2,7 @@
 import React from "react";
 
 import { SignInSchema } from "@/lib/validation";
-import AuthForm from "@/components/ui/forms/AuthForm";
+import AuthForm from "@/components/forms/AuthForm";
 
 const SignIn = () => {
   return (

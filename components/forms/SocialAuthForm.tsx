@@ -5,7 +5,7 @@ import React from "react";
 import { toast } from "sonner";
 
 import ROUTES from "@/constants/routes";
-import { Button } from "../button";
+import { Button } from "../ui/button";
 
 const SocialAuthForm = () => {
   const buttonClass =

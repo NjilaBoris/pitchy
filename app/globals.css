@@ -12,8 +12,12 @@
     border-color: var(--color-gray-200, currentcolor);
   }
 }
+.back {
+  color: #e721609f;
+}
 @theme {
   --color-primary: #ee2b69;
+  --color-primary-600: #e721609f;
   --color-primary-100: #ffe8f0;
   --color-primary-150: #fff1e6;
   --color-primary-500: #ff7000;
@@ -42,7 +46,8 @@
   --shadow-100: 2px 2px 0px 0px rgb(0, 0, 0);
   --shadow-200: 2px 2px 0px 2px rgb(0, 0, 0);
   --shadow-300: 2px 2px 0px 2px rgb(238, 43, 105);
-  --shadow-light-100: 0px 12px 20px 0px rgba(184, 184, 184, 0.03),
+  --shadow-light-100:
+    0px 12px 20px 0px rgba(184, 184, 184, 0.03),
     0px 6px 12px 0px rgba(184, 184, 184, 0.02),
     0px 2px 4px 0px rgba(184, 184, 184, 0.03);
   --shadow-light-200: 10px 10px 20px 0px rgba(218, 213, 213, 0.1);
