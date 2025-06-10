@@ -28,3 +28,20 @@ interface RouteParams {
   params: Promise<Record<string, string>>;
   searchParams: Promise<Record<string, string>>;
 }
+interface Author {
+  _id: string;
+  name: string;
+  image: string;
+}
+
+interface Pitch {
+  _id: string;
+  title: string;
+  description: string;
+  views: number;
+  category: string;
+  imageUrl: string;
+  pitchDetails: string;
+  author: Author;
+  createdAt: Date;
+}

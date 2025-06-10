@@ -6,7 +6,7 @@ export interface IStartup {
   views: number;
   category: string;
   imageUrl: string;
-  pitch: string;
+  pitchDetails: string;
   author: Types.ObjectId;
 }
 
@@ -18,7 +18,7 @@ const StartupSchema = new Schema<IStartup>(
     views: { type: Number, default: 0 },
     category: { type: String, required: true },
     imageUrl: { type: String, required: true },
-    pitch: { type: String, required: true },
+    pitchDetails: { type: String, required: true },
     author: { type: Schema.Types.ObjectId, ref: "User", required: true },
   },
   { timestamps: true }

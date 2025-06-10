@@ -49,3 +49,38 @@ export const SignUpSchema = z.object({
       message: "Password must contain at least one special character.",
     }),
 });
+export const UserSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  username: z.string().min(3, "Username must be at least 3 characters"),
+  email: z.string().email("Invalid email address"),
+  bio: z.string().optional(),
+  image: z.string().url("Invalid image URL").optional(),
+  location: z.string().optional(),
+  portfolio: z.string().url("Invalid portfolio URL").optional(),
+});
+export const PitchSchema = z.object({
+  title: z
+    .string()
+    .min(5, {
+      message: "Title must be at least 5 characters.",
+    })
+    .max(130, { message: "Title musn't be longer then 130 characters." }),
+  content: z.string().min(100, { message: "Minimum of 100 characters." }),
+  category: z
+    .string()
+    .min(5, { message: "Category must be at least 5 characters" })
+    .max(130, { message: "Category musn't be longer then 100 characters." }),
+  imageUrl: z
+    .string()
+    .url()
+    .refine(async (url) => {
+      try {
+        const res = await fetch(url, { method: "HEAD" });
+        const contentType = res.headers.get("content-type");
+        return contentType?.startsWith("image/");
+      } catch {
+        return false;
+      }
+    }),
+  pitchDetails: z.string().min(10, { message: "Minimum of 10 characters." }),
+});
