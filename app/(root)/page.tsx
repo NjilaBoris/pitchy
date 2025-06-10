@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import SearchForm from "@/components/search/SearchForm";
 import ROUTES from "@/constants/routes";
 
@@ -6,6 +7,8 @@ interface SearchParams {
 }
 export default async function Home({ searchParams }: SearchParams) {
   const { query } = searchParams;
+  const session = await auth();
+  console.log(session?.user);
 
   return (
     <>
