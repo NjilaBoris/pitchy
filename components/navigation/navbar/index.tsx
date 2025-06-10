@@ -2,12 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-import { auth } from "@/auth";
+import { auth, signOut } from "@/auth";
 
 import MobileNavigation from "./MoblieNavigation";
 import UserAvatar from "@/components/UserAvartar";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
+import { LogOut } from "lucide-react";
 
 const Navbar = async () => {
   const session = await auth();
@@ -31,6 +32,23 @@ const Navbar = async () => {
                   <span className="text-primary">Create</span>
                 </Button>
               </Link>
+              <form
+                action={async () => {
+                  "use server";
+
+                  await signOut();
+                }}
+              >
+                <Button
+                  type="submit"
+                  className="base-medium  !bg-transparent px-4 py-3 cursor-pointer min-h-[41px] w-full"
+                >
+                  <LogOut className="size-5 text-black dark:text-white" />
+                  <span className="text-dark300_light900 max-lg:hidden">
+                    Logout
+                  </span>
+                </Button>
+              </form>
             </>
           ) : (
             <>

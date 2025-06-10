@@ -6,7 +6,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <main className="background-light850_dark100 relative">
       <Navbar />
-      {children}
+      <section className="min-h-screen">{children}</section>
     </main>
   );
 };
