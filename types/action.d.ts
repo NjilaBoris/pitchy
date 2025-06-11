@@ -14,3 +14,10 @@ interface AuthCredentials {
   email: string;
   password: string;
 }
+interface CreatePitchParams {
+  title: string;
+  content: string;
+  category: string;
+  imageUrl: string;
+  pitchDetails: string;
+}

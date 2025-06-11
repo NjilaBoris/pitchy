@@ -6,7 +6,7 @@ interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
 export default async function Home({ searchParams }: SearchParams) {
-  const { query } = searchParams;
+  const { query } = await searchParams;
   const session = await auth();
   console.log(session?.user);
 

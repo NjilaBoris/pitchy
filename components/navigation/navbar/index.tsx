@@ -12,6 +12,7 @@ import { LogOut } from "lucide-react";
 
 const Navbar = async () => {
   const session = await auth();
+  const userId = session?.user?.id;
   return (
     <nav
       className="flex-between  background-light900_dark200 fixed z-50 p-6 
@@ -25,7 +26,7 @@ const Navbar = async () => {
       </Link>
       <div className="hidden sm:flex justify-end flex-row flex-1 items-center ">
         <div className="flex flex-between justify-end gap-6">
-          {session?.user?.id ? (
+          {userId ? (
             <>
               <Link href={ROUTES.CREATE_PITCH}>
                 <Button className="small-medium btn-secondary min-h-[41px] w-full rounded-lg p-6 shadow-none">
@@ -44,7 +45,7 @@ const Navbar = async () => {
                   className="base-medium  !bg-transparent px-4 py-3 cursor-pointer min-h-[41px] w-full"
                 >
                   <LogOut className="size-5 text-black dark:text-white" />
-                  <span className="text-dark300_light900 max-lg:hidden">
+                  <span className="text-dark300_light900 max-lg:hidden ">
                     Logout
                   </span>
                 </Button>
