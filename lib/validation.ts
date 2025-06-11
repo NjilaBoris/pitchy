@@ -70,6 +70,10 @@ export const PitchSchema = z.object({
     .string()
     .min(5, { message: "Category must be at least 5 characters" })
     .max(130, { message: "Category musn't be longer then 100 characters." }),
+  description: z
+    .string()
+    .min(5, { message: "description must be at least 5 characters" })
+    .max(130, { message: "description musn't be longer then 100 characters." }),
   imageUrl: z
     .string()
     .url()

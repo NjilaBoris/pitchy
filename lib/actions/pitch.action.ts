@@ -44,7 +44,7 @@ export async function createPitch(
     await session.endSession();
   }
 }
-export async function editQuestion(
+export async function editPitch(
   params: EditPitchParams
 ): Promise<ActionResponse<IStartup>> {
   const validationResult = await action({
@@ -99,7 +99,7 @@ export async function editQuestion(
     await session.endSession();
   }
 }
-export const getPitchn = cache(async function getQuestion(
+export const getPitch = cache(async function getQuestion(
   params: GetPitchParams
 ): Promise<ActionResponse<Pitch>> {
   const validationResult = await action({

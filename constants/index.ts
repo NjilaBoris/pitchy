@@ -12,7 +12,7 @@ export const sidebarLinks = [
 
   {
     imgURL: "/icons/question.svg",
-    route: "/ask-question",
+    route: "/create-pitch",
     label: "Create a Pitch",
   },
 ];

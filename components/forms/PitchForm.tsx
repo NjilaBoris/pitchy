@@ -7,7 +7,6 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import React, { useRef, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
 
 import ROUTES from "@/constants/routes";
@@ -23,8 +22,10 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import { createPitch, editPitch } from "@/lib/actions/pitch.action";
 import { PitchSchema } from "@/lib/validation";
-import { createPitch } from "@/lib/actions/pitch.action";
+import { toast } from "sonner";
+import { Textarea } from "../ui/textarea";
 
 const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
@@ -45,23 +46,23 @@ const PitchForm = ({ pitch, isEdit = false }: Params) => {
     defaultValues: {
       title: pitch?.title || "",
       category: pitch?.category || "",
-      content: pitch?.pitchDetails || "",
+      description: pitch?.description || "",
       imageUrl: pitch?.imageUrl || "",
-      pitchDetails: pitch?.description || "",
+      pitchDetails: pitch?.pitchDetails || "",
     },
   });
 
   const handleCreatePitch = async (data: z.infer<typeof PitchSchema>) => {
     startTransition(async () => {
       if (isEdit && pitch) {
-        const result = await editQuestion({
-          questionId: pitch?._id,
+        const result = await editPitch({
+          pitchId: pitch?._id,
           ...data,
         });
 
         if (result.success) {
           toast.success("Success", {
-            description: "Question updated Successfully",
+            description: "Question created Successfully",
             style: {
               backgroundColor: "#24a148",
               color: "#fff",
@@ -96,7 +97,7 @@ const PitchForm = ({ pitch, isEdit = false }: Params) => {
           },
         });
 
-        if (result.data) router.push(ROUTES.QUESTION(result.data._id));
+        if (result.data) router.push(ROUTES.PITCH(result.data._id));
       } else {
         toast.error(`Error ${result?.status}`, {
           description: result?.error?.message || "Something Went Wrong",
@@ -113,7 +114,7 @@ const PitchForm = ({ pitch, isEdit = false }: Params) => {
   return (
     <Form {...form}>
       <form
-        className="flex w-full flex-col gap-10"
+        className="flex sm:w-[70%] flex-col gap-10 m-auto "
         onSubmit={form.handleSubmit(handleCreatePitch)}
       >
         <FormField
@@ -121,8 +122,8 @@ const PitchForm = ({ pitch, isEdit = false }: Params) => {
           name="title"
           render={({ field }) => (
             <FormItem className="flex w-full flex-col">
-              <FormLabel className="paragraph-semibold text-dark400_light800">
-                Question Title <span className="text-primary-500">*</span>
+              <FormLabel className="paragraph-semibold text-dark400_light800 sm:!text-[1rem]">
+                Pitch Title <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl>
                 <Input
@@ -131,10 +132,72 @@ const PitchForm = ({ pitch, isEdit = false }: Params) => {
                 />
               </FormControl>
               <FormDescription className="body-regular mt-2.5 text-light-500">
-                Be specific and imagine you&apos;re asking a question to another
-                person.
+                Be specific and brief with your pitch title.
               </FormDescription>
-              <FormMessage className="text-red-600" />
+              <FormMessage className="text-[#721c24]" />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem className="flex w-full flex-col">
+              <FormLabel className="paragraph-semibold text-dark400_light800 sm:!text-[1rem]">
+                Description <span className="text-primary-500">*</span>
+              </FormLabel>
+              <FormControl>
+                <Textarea
+                  className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-[56px] border"
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription className="body-regular mt-2.5 text-light-500">
+                A brief description of your Startup
+              </FormDescription>
+              <FormMessage className="text-[#721c24]" />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="category"
+          render={({ field }) => (
+            <FormItem className="flex w-full flex-col">
+              <FormLabel className="paragraph-semibold text-dark400_light800 sm:!text-[1rem]">
+                Startup Category <span className="text-primary-500">*</span>
+              </FormLabel>
+              <FormControl>
+                <Input
+                  className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-[56px] border"
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription className="body-regular mt-2.5 text-light-500">
+                Startup Category (Tech, Health, Education...).
+              </FormDescription>
+              <FormMessage className="text-[#721c24]" />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="imageUrl"
+          render={({ field }) => (
+            <FormItem className="flex w-full flex-col">
+              <FormLabel className="paragraph-semibold text-dark400_light800 sm:!text-[1rem]">
+                Startup Image Url<span className="text-primary-500">*</span>
+              </FormLabel>
+              <FormControl>
+                <Input
+                  className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-[56px] border"
+                  {...field}
+                />
+              </FormControl>
+              <FormDescription className="body-regular mt-2.5 text-light-500">
+                Startup Image URL
+              </FormDescription>
+              <FormMessage className="text-[#721c24]" />
             </FormItem>
           )}
         />
@@ -143,8 +206,8 @@ const PitchForm = ({ pitch, isEdit = false }: Params) => {
           name="content"
           render={({ field }) => (
             <FormItem className="flex w-full flex-col">
-              <FormLabel className="paragraph-semibold text-dark400_light800">
-                Detailed explanation of your problem{" "}
+              <FormLabel className="paragraph-semibold text-dark400_light800 sm:text-[1rem]">
+                Detailed explanation of your Startup{" "}
                 <span className="text-primary-500">*</span>
               </FormLabel>
               <FormControl>
@@ -155,19 +218,20 @@ const PitchForm = ({ pitch, isEdit = false }: Params) => {
                 />
               </FormControl>
               <FormDescription className="body-regular mt-2.5 text-light-500">
-                Introduce the problem and expand on what you&apos;ve put in the
-                title.
+                Tell us everything about your startup. It could include your
+                mission, problem statement, solution, business model, target
+                audience, and any other relevant details.
               </FormDescription>
-              <FormMessage />
+              <FormMessage className="text-[#721c24]" />
             </FormItem>
           )}
         />
 
-        <div className="mt-16 flex justify-end">
+        <div className="mt-3 flex justify-end ">
           <Button
             type="submit"
             disabled={isPending}
-            className="primary-gradient w-fit !text-light-900 cursor-pointer"
+            className="bg-primary w-full !p-7 !text-light-900 mb-3"
           >
             {isPending ? (
               <>
@@ -175,7 +239,7 @@ const PitchForm = ({ pitch, isEdit = false }: Params) => {
                 <span>Submitting</span>
               </>
             ) : (
-              <>{isEdit ? "Edit" : "Ask a Question"}</>
+              <>{isEdit ? "Edit" : "Submit Startup"}</>
             )}
           </Button>
         </div>
