@@ -84,6 +84,12 @@ export const PitchSchema = z.object({
     }),
   pitchDetails: z.string().min(10, { message: "Minimum of 10 characters." }),
 });
+export const EditPitchSchema = PitchSchema.extend({
+  pitchId: z.string().min(1, "Question ID is required"),
+});
+export const GetPitchSchema = z.object({
+  pitchId: z.string().min(1, "Question ID is required"),
+});
 export const AccountSchema = z.object({
   userId: z.string(),
   name: z.string().min(1, "Name is required"),

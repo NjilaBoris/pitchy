@@ -6,9 +6,8 @@ import PitchForm from "@/components/forms/PitchForm";
 
 const AskAQuestion = async () => {
   const session = await auth();
-  const userId = session?.user?.id;
 
-  if (!userId) return redirect("/sign-in");
+  if (!session) return redirect("/sign-in");
 
   return (
     <>

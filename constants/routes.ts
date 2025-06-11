@@ -4,7 +4,7 @@ const ROUTES = {
   SIGN_UP: "/sign-up",
   CREATE_PITCH: "/create-pitch",
   PROFILE: (id: string) => `/profile/${id}`,
-  QUESTION: (id: string) => `/pitchs/${id}`,
+  PITCH: (id: string) => `/pitchs/${id}`,
   SIGN_IN_WITH_OAUTH: `signin-with-oauth`,
 };
 

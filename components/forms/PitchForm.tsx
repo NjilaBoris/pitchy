@@ -51,7 +51,7 @@ const PitchForm = ({ pitch, isEdit = false }: Params) => {
     },
   });
 
-  const handleCreateQuestion = async (data: z.infer<typeof PitchSchema>) => {
+  const handleCreatePitch = async (data: z.infer<typeof PitchSchema>) => {
     startTransition(async () => {
       if (isEdit && pitch) {
         const result = await editQuestion({
@@ -69,7 +69,7 @@ const PitchForm = ({ pitch, isEdit = false }: Params) => {
             },
           });
 
-          if (result.data) router.push(ROUTES.QUESTION(result.data._id));
+          if (result.data) router.push(ROUTES.PITCH(result.data._id));
         } else {
           toast.error(`Error ${result?.status}`, {
             description: result?.error?.message || "Something Went Wrong",
@@ -114,7 +114,7 @@ const PitchForm = ({ pitch, isEdit = false }: Params) => {
     <Form {...form}>
       <form
         className="flex w-full flex-col gap-10"
-        onSubmit={form.handleSubmit(handleCreateQuestion)}
+        onSubmit={form.handleSubmit(handleCreatePitch)}
       >
         <FormField
           control={form.control}

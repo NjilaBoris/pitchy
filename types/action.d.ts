@@ -21,3 +21,9 @@ interface CreatePitchParams {
   imageUrl: string;
   pitchDetails: string;
 }
+interface EditPitchParams extends CreatePitchParams {
+  pitchId: string;
+}
+interface GetPitchParams {
+  pitchId: string;
+}
