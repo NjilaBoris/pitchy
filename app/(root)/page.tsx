@@ -1,15 +1,24 @@
-import { auth } from "@/auth";
-import PitchForm from "@/components/forms/PitchForm";
+import StartupCard from "@/components/cards/StartupCard";
+import DataRenderer from "@/components/DataRender";
 import SearchForm from "@/components/search/SearchForm";
 import ROUTES from "@/constants/routes";
+import { EMPTY_QUESTION } from "@/constants/states";
+import { getPitchs } from "@/lib/actions/pitch.action";
+import { Metadata } from "next";
 
-interface SearchParams {
-  searchParams: Promise<{ [key: string]: string }>;
-}
-export default async function Home({ searchParams }: SearchParams) {
-  const { query } = await searchParams;
-  const session = await auth();
-  console.log(session?.user);
+export const metadata: Metadata = {
+  title: "YC Directory | Home",
+  description: "Pitch, Vote and Grow",
+};
+export default async function Home({ searchParams }: RouteParams) {
+  const { query, page, pageSize, filter } = await searchParams;
+  const { success, error, data } = await getPitchs({
+    page: Number(page) || 1,
+    pageSize: Number(pageSize) || 10,
+    query: query || "",
+    filter: filter || "",
+  });
+  const { pitch, isNext } = data || {};
 
   return (
     <>
@@ -39,6 +48,19 @@ export default async function Home({ searchParams }: SearchParams) {
           {query ? `Search results for "${query}"` : "All Startups"}
         </p>
       </section>
+      <DataRenderer
+        success={success}
+        error={error}
+        data={pitch}
+        empty={EMPTY_QUESTION}
+        render={(pitchs) => (
+          <div className="mt-10 flex w-full flex-col gap-6">
+            {pitch.map((pitch) => (
+              <StartupCard key={pitch._id} pitch={pitch} />
+            ))}
+          </div>
+        )}
+      />
     </>
   );
 }

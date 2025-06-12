@@ -1,8 +1,13 @@
 import { Startup } from "@/database";
 import action from "../handlers/action";
 import handleError from "../handlers/error";
-import { EditPitchSchema, GetPitchSchema, PitchSchema } from "../validation";
-import mongoose from "mongoose";
+import {
+  EditPitchSchema,
+  GetPitchSchema,
+  PaginatedSearchParamsSchema,
+  PitchSchema,
+} from "../validation";
+import mongoose, { FilterQuery } from "mongoose";
 import { IStartup } from "@/database/pitch.model";
 import { cache } from "react";
 
@@ -125,3 +130,72 @@ export const getPitch = cache(async function getQuestion(
     return handleError(error) as ErrorResponse;
   }
 });
+
+export async function getPitchs(params: PaginatedSearchParams): Promise<
+  ActionResponse<{
+    pitch: Pitch;
+    isNext: boolean;
+  }>
+> {
+  const validationResult = await action({
+    params,
+    schema: PaginatedSearchParamsSchema,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { page = 1, pageSize = 10, query, filter } = params;
+
+  const skip = (Number(page) - 1) * pageSize;
+  const limit = pageSize;
+
+  const filterQuery: FilterQuery<typeof Startup> = {};
+  let sortCriteria = {};
+
+  try {
+    // Search
+    if (query) {
+      filterQuery.$or = [
+        { title: { $regex: query, $options: "i" } },
+        { content: { $regex: query, $options: "i" } },
+      ];
+    }
+
+    // Filters
+    switch (filter) {
+      case "newest":
+        sortCriteria = { createdAt: -1 };
+        break;
+      case "oldest":
+        sortCriteria = { createdAt: 1 };
+        break;
+
+      default:
+        sortCriteria = { createdAt: -1 };
+        break;
+    }
+
+    const totalQuestions = await Startup.countDocuments(filterQuery);
+
+    const pitchs = await Startup.find(filterQuery)
+      .populate("author", "name image")
+      .lean()
+      .sort(sortCriteria)
+      .skip(skip)
+      .limit(limit);
+
+    const isNext = totalQuestions > skip + pitchs.length;
+
+    return {
+      success: true,
+      data: {
+        pitch: JSON.parse(JSON.stringify(pitchs)),
+        isNext,
+      },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+}
